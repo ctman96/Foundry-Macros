@@ -13,7 +13,7 @@ let targets = canvas.tokens.placeables.filter((t) => {
 console.log(targets)
 
 // Only affect own effects
-const effects = ['Magic Weapon', 'Burning Weapons', 'Slick Concoction', 'Galeforce Infusion'];
+const effects = ['Magic Weapon', 'Burning Weapons', 'Slick Concoction', 'Galeforce Infusion', 'Greater Magic Weapon'];
 
 targets.forEach((target) => {
     let macroActor = target.actor;

@@ -4,10 +4,17 @@
  * Cody Newman, 2023
  */
 
+// Find my token by name, so I don't have to worry about selecting it
+const talon = canvas.tokens.placeables.find((t) => t.actor.name === 'Talon');
+if (!talon) {
+    ui.notifications.warn("Talon token not found on map");
+    return;
+}
+
 // Get possible targets
-let players = canvas.tokens.placeables.filter((t) => {
-    if (t.id === token.id) return false;
-    let distance = canvas.grid.measureDistance(token, t, {gridSpaces:true})
+const players = canvas.tokens.placeables.filter((t) => {
+    if (t.id === talon.id) return false;
+    let distance = canvas.grid.measureDistance(talon, t, {gridSpaces:true})
     console.log(t.actor.name, distance, t.actor.type)
     return distance < 11 && t.actor.type === "Player Character";
 });
@@ -44,7 +51,7 @@ const applyGI = (html) => {
     } catch (e) {}
 
     if (encounter === undefined || encounter === null) {
-        ui.notifications.warn("This requires being in an active encounter");
+        ui.notifications.warn("Target is not in an active encounter");
         return;
     }
 
@@ -63,7 +70,7 @@ const applyGI = (html) => {
         changes: [{
             key: 'data.defences.ac.temp',
             mode: 2,
-            value: token.actor.system.intMod,
+            value: talon.actor.system.intMod,
         }]
     }
 

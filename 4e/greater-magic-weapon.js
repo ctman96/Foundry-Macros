@@ -1,5 +1,5 @@
 /* 
- * Macro for applying Slick Concoction to allies within range
+ * Macro for applying Greater Magic Weapon to allies within range
  * 
  * Cody Newman, 2023
  */
@@ -17,7 +17,7 @@ const targets = canvas.tokens.placeables.filter((t) => {
     let distance = canvas.grid.measureDistance(talon, t, {gridSpaces:true})
     console.log(t.actor, distance);
     // Only apply to PCs within range
-    return distance < 4 && t.actor.type === "Player Character";
+    return distance < 2 && t.actor.type === "Player Character";
 });
 console.log(targets)
 
@@ -38,8 +38,8 @@ console.log(encounter, startRound, startTurn);
 
 // Build effect
 const effect = {
-    name: 'Slick Concoction',
-    icon: "icons/consumables/potions/bottle-bulb-empty-glass.webp",
+    name: 'Greater Magic Weapon',
+    icon: "icons/weapons/swords/sword-runed-glowing.webp",
     origin: 'Actor.8aUNbQwhL1GYAjCS',
     duration: {
         startRound,
@@ -49,9 +49,13 @@ const effect = {
     },
     disabled: false,
     changes: [{
-        key: 'data.defences.ref.temp',
+        key: 'data.modifiers.attack.power',
         mode: 2,
-        value: 4,
+        value: talon.actor.system.conMod,
+    },{
+        key: 'data.modifiers.attack.damage',
+        mode: 2,
+        value: talon.actor.system.conMod,
     }]
 }
 

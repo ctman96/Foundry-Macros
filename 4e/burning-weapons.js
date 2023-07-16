@@ -4,11 +4,18 @@
  * Cody Newman, 2022
  */
 
+// Find my token by name, so I don't have to worry about selecting it
+const talon = canvas.tokens.placeables.find((t) => t.actor.name === 'Talon');
+if (!talon) {
+    ui.notifications.warn("Talon token not found on map");
+    return;
+}
+
 const applyBW = () => {
     // Get relevant player targets
     let targets = canvas.tokens.placeables.filter((t) => {
-        if (t.id === token.id) return false;
-        let distance = canvas.grid.measureDistance(token, t, {gridSpaces:true})
+        if (t.id === talon.id) return false;
+        let distance = canvas.grid.measureDistance(talon, t, {gridSpaces:true})
         console.log(t.actor, distance);
         // Only apply to PCs within range
         return distance < 3 && t.actor.type === "Player Character";
@@ -20,9 +27,9 @@ const applyBW = () => {
     let startRound;
     let startTurn;
     try { 
-        encounter = token.combatant.combat.id; 
-        startRound = token.combatant.combat.current.round;
-        startTurn = token.combatant.combat.current.turn;
+        encounter = talon.combatant.combat.id; 
+        startRound = talon.combatant.combat.current.round;
+        startTurn = talon.combatant.combat.current.turn;
     } catch (e) {}
     if (encounter === undefined || encounter === null) {
         ui.notifications.warn("This requires being in an active encounter");
@@ -45,7 +52,7 @@ const applyBW = () => {
         changes: [{
             key: 'data.modifiers.damage.power',
             mode: 2,
-            value: token.actor.system.conMod,
+            value: talon.actor.system.conMod,
         }]
     }
 
@@ -53,14 +60,14 @@ const applyBW = () => {
     targets.forEach((target) => {
         let macroActor = target.actor;
         if (macroActor === undefined || macroActor === null) {
-            ui.notifications.warn("Please target a token first.");
+            ui.notifications.warn("Cannot access target actor");
             return;
         }
 
         let encounter;
         try { encounter = target.combatant.combat.id; } catch (e) {}
         if (encounter === undefined || encounter === null) {
-            ui.notifications.warn("This requires being in an active encounter");
+            ui.notifications.warn("Target is not in an active encounter");
             return;
         }
 
